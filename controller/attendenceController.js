@@ -14,7 +14,6 @@ exports.markAttendence = async (req, res) => {
     console.log("actual Time");
     console.log(Date.now());
 
-
     //Check QR Code Validity
 
     const decryptedMessage = encrypt.decryptQRCode(qrCodeData);
@@ -111,6 +110,46 @@ exports.getClassAttendence = async (req, res) => {
 
     res.send(classAR.students);
     console.log(classAR.students);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getClassPresentStudent = async (req, res) => {
+  try {
+    const classID = req.params.classID;
+    const date = req.query.date;
+    console.log(date);
+
+    let classAR = await ClassAR.findOne({
+      classID: classID,
+      date: date,
+    });
+
+    if (!classAR) {
+      return res.status(200).send("0");
+    }
+    console.log(classAR.students.length);
+
+    res.status(200).send(classAR.students.length.toString());
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getClassTotalStudent = async (req, res) => {
+  try {
+    const classID = req.params.classID;
+    let classD = await Class.findOne({ classID: classID });
+
+    if (!classD) {
+      return res.status(200).send("0");
+    }
+    console.log(classD.Students.length);
+
+    res.status(200).send(classD.Students.length.toString());
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal server error" });

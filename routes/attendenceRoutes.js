@@ -15,4 +15,16 @@ router.get(
   attendenceController.getClassAttendence
 );
 
+router.get(
+  "/getClassPresentStudent/:classID",
+  auth.authenticateToken,
+  attendenceController.getClassPresentStudent
+);
+
+router.get(
+  "/getClassTotalStudent/:classID",
+  auth.authenticateToken,
+  attendenceController.getClassTotalStudent
+);
+
 module.exports = router;
